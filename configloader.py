@@ -3,7 +3,6 @@
 import os 
 import json
 
-
 class Loader(object):
   # -- class variables -- #
   _token = "token" # string
@@ -22,18 +21,33 @@ class Loader(object):
       "green": 0x008000
     }
 
-    # -- main data retreived from config --#
-    self.token = ""
-    self.embed_color = ""
-    self.img_url_string = ""
-
     # -- get file name -- #
     if file_name == "":
       self.file_name = "config.json"
     else:
       self.file_name = file_name
   
-  
+
+  def main(self):
+    # -- main function to load and validate conig -- # 
+    config = self.load_config()
+
+    if isinstance(config, str):
+      # --- handle error fatally here ---
+      pass 
+    
+    # --- if len of str returned greater the string is not a color rather an error message --- #
+    e = self.check_valid_color(config[3])
+    if len(e) >= 10:
+      return e
+    
+    # -- check if the token was valid if not handle fatally -- #
+    re = self.check_token_valid(config[0])
+    if re != "":
+      pass
+      
+
+
   def load_config(self):
     # -- check if file name exists -- #
     if not os.path.exists(self.filename):
@@ -61,23 +75,30 @@ class Loader(object):
     
     # -- check if any val in tuple if so return error string -- #
     if any(not x for x in config):
-      return "[ERROR]: Invalid Value Provided In Json"
+      return f"[ERROR]: Invalid Value Provided In {self.file_name} file"
      
     return config
 
+  
+  def check_token_valid(self, token):
+    # -- validate token -- #
+    from discord import client
+    try:
+      client.run(token, bot=False)
+      client.logout()
+      return ""
+    except Exception as failed:
+      # -- handle invalid token here --- #
+      return (
+        f"[ERROR]: Invalid Token, Please Provide A Valid Token, Execption: {failed}"
+      )
 
-
-
-
-
-
-  def check_token_valid(self):
-    pass
-
-  def check_valid_color(self):
-    pass
-
-
+  def check_valid_color(self, e_color):
+    # -- checks if the config color provided mapped to the instance dict -- #
+    return self.colors.get(
+      e_color, "[ERROR]: Please Provide A Valid color! Options: Red, Blue, Green, and Black."
+    )
+  
 
 
 
