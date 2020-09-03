@@ -63,9 +63,10 @@ def RPC():
   client_id = "750864113248501898"
   RPC = Presence(client_id)
   RPC.connect()
-  (RPC.update(state="   ", details="Zeus Selfbot", large_image="43960_13923879_2588623_f083a159_image", small_image="d6a69718942655_562d1f879f31d"))
+  (RPC.update(state="   ", details="Zeus Selfbot", large_image="big", small_image="small"))
 
 RPC()
+startprint()
 
 print(f"{Fore.CYAN}Enter Your Desired Prefix:{Fore.WHITE}")
 prefix = input(" ")
