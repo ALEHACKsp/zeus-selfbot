@@ -1,4 +1,3 @@
-
 # -- standard libraries -- #
 import os 
 import json
@@ -8,7 +7,7 @@ class Loader(object):
   _token = "token" # string
   _nitro_snipe = "nitro_snipe" # value retreived is bool
   _giveaway_snipe = "giveaway_sniper" # value retreived is bool
-  _embed_color = "embed color" # value retreived is bool
+  _embed_color = "embed_color" # value retreived is bool
 
 
   def __init__(self, file_name):
@@ -34,23 +33,29 @@ class Loader(object):
 
     if isinstance(config, str):
       # --- handle error fatally here ---
-      pass 
+      print(config)
+      quit()
     
+
     # --- if len of str returned greater the string is not a color rather an error message --- #
     e = self.check_valid_color(config[3])
-    if len(e) >= 10:
-      return e
-    
+    if isinstance(e, str):
+      # --- handle error fatally here ---
+      print(e)
+      quit()
+
     # -- check if the token was valid if not handle fatally -- #
     re = self.check_token_valid(config[0])
     if re != "":
-      pass
-      
+      print("temp invalid token exiting...")
+      quit()
+    
+    return config
 
 
   def load_config(self):
     # -- check if file name exists -- #
-    if not os.path.exists(self.filename):
+    if not os.path.exists(self.file_name):
       return "[ERROR]: File name does not exist"
     
     # -- load into dictionary -- #
@@ -65,6 +70,7 @@ class Loader(object):
           f"[ERROR]: Failed to load config, Exception: {f}"
         )
 
+      
       # -- get will return nil if value was not not found and nil is falsy --- #
       config = (
         config.get(Loader._token),
@@ -72,6 +78,7 @@ class Loader(object):
         config.get(Loader._nitro_snipe),
         config.get(Loader._embed_color)
       )
+    
     
     # -- check if any val in tuple if so return error string -- #
     if any(not x for x in config):
@@ -82,7 +89,8 @@ class Loader(object):
   
   def check_token_valid(self, token):
     # -- validate token -- #
-    from discord import client
+    import discord
+    client = discord.Client()
     try:
       client.run(token, bot=False)
       client.logout()
@@ -98,10 +106,3 @@ class Loader(object):
     return self.colors.get(
       e_color, "[ERROR]: Please Provide A Valid color! Options: Red, Blue, Green, and Black."
     )
-  
-
-
-
-
-    
-

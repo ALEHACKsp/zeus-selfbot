@@ -10,12 +10,14 @@ import time
 import asyncio
 from random import randint
 
+
 # -- 3rd party lib imports -- #
-from pypresence import presence
+from pypresence import Presence
 from discord.ext import commands
 from colorama import Fore, init, Style, Back
 import requests 
 import discord
+
 
 # -- globals and constanst -- #
 CONFIG_FILE_NAME = "config.json"
@@ -26,6 +28,11 @@ AUTHOR_STRING = "Charge &c| Zxy"
 # -- Entry Point -- #
 def main():
   pass
+
+
+from configloader import Loader
+
+
 
 
 
@@ -66,15 +73,20 @@ def RPC():
   (RPC.update(state="   ", details="Zeus Selfbot", large_image="big", small_image="small"))
 
 RPC()
-startprint()
+# startprint()
+
 
 print(f"{Fore.CYAN}Enter Your Desired Prefix:{Fore.WHITE}")
 prefix = input(" ")
 os.system('cls')
 
-client = discord.Client()
+
 client = commands.Bot(
     description='Zeus Selfbot',
     command_prefix=f"{prefix}",
     self_bot=True
-)
+) 
+
+token = Loader("config.json").main()[0]
+
+client.run(token)
