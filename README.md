@@ -1,4 +1,4 @@
-# 📣 🔥Nebula 🔥 📣
+# 📣 🔥Zeus🔥 📣
 An advanced discord self-bot in the discord.py rewrite
 
 ## Things you need.
