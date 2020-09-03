@@ -36,7 +36,7 @@ class ErrorNoDiscord:
         f"error occured when writing to file, {e}"
       )
 
-  def new_error(self, info, error):
+  def new_error(self, info, error, fatal): # fatal is a bool if truthy log error and quit
     # --- wrap all file writing functions in try except --- # 
     try:
       
