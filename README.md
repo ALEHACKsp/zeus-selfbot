@@ -11,5 +11,47 @@ It does not work because you do not have the api keys for the command, or you do
 ## Credits
 > Zxy,
 > Charge,
-> C99.nl
 
+
+## example json
+```json
+{
+  "token": "",
+
+  "embed": {
+    "author": "",
+    "author_url": "",
+    "footer": "",
+    "footer_url": "",
+    "image_url": "",
+    "color": ""
+  },
+
+  "bot": {
+    "name": "Zeus Selfbot",
+    "prefix": ".",
+    "rich_presence": true,
+    "nitro_snipe": true,
+    "giveaway_snipe": true,
+    "log_messages": true
+  },
+
+  "rich_presence": {
+    "state": "",
+    "details": ""
+  },
+
+  "errors": {
+    "filename": "errors.log",
+    "custom_string": "[+] Zeus Selfbot Error And Event Log [+]"
+  },
+
+  "log": {
+    "file_name": "messages.log",
+    "user_ids": [
+      1,
+      2
+    ]
+  }
+}
+```
