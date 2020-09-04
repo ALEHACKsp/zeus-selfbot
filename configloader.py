@@ -33,7 +33,7 @@ class Loader(object):
 
     if isinstance(config, str):
       # --- handle error fatally here ---
-      print(config)
+      print(f"Exception Occured When Loading File: {config}")
       quit()
     
 
@@ -41,7 +41,7 @@ class Loader(object):
     e = self.check_valid_color(config[3])
     if isinstance(e, str):
       # --- handle error fatally here ---
-      print(e)
+      print(f"Exception Occured When Loading File: {e}")
       quit()
 
     # -- check if the token was valid if not handle fatally -- #
@@ -106,3 +106,5 @@ class Loader(object):
     return self.colors.get(
       e_color, "[ERROR]: Please Provide A Valid color! Options: Red, Blue, Green, and Black."
     )
+  
+  

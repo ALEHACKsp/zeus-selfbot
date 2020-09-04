@@ -11,7 +11,7 @@ import asyncio
 import colorama
 import datetime
 from random import randint
-
+import sys
 
 # -- 3rd party lib imports -- #
 from pypresence import Presence
@@ -20,88 +20,88 @@ from discord.ext import tasks
 from colorama import Fore, init, Style, Back
 import requests 
 import discord
-colorama.init()
-
-
-# -- globals and constanst -- #
-CONFIG_FILE_NAME = "config.json"
-AUTHOR_STRING = "Charge &c| Zxy"
-
-# -- Config Stuff -- #
-
-
-# -- Entry Point -- #
-def main():
-  pass
-
-
 from configloader import Loader
 
 
+# -- globals and constants -- #
+CONFIG_FILE_NAME = "config.json"
+AUTHOR_STRING = "Charge | Zxy"
+BOT_NAME = "Zeus Selfbot"
+PREFIX_LENGTH = 5
+BANNER = lambda x: f"""
+\033[34;1m
+███████╗███████╗██╗   ██╗███████╗
+╚══███╔╝██╔════╝██║   ██║██╔════╝
+███╔╝ █████╗  ██║   ██║███████╗
+███╔╝  ██╔══╝  ██║   ██║╚════██║- Prefix {x}
+███████╗███████╗╚██████╔╝███████║- By Charge and Zxy
+╚══════╝╚══════╝ ╚═════╝ ╚══════╝\033[0m                              
+"""
 
 
 
-def login():
-  pass
-
-# -- main selfbot code -- #
-def startprint():
-  #if giveaway_sniper:
-    #giveaway = f"{Fore.WHITE}[{Fore.GREEN}Enabled{Fore.WHITE}]" 
-  #else:
-    #giveaway = f"{Fore.WHITE}[{Fore.RED}Disabled{Fore.WHITE}]"
-
-  #if nitro_sniper:
-    #nitro = f"{Fore.WHITE}[{Fore.GREEN}Enabled{Fore.WHITE}]"        
-  #else:
-    #nitro = f"{Fore.WHITE}[{Fore.RED}Disabled{Fore.WHITE}]"
-    print(f'''{Fore.RESET}
-
-                        {Fore.BLUE}███████{Fore.WHITE}╗{Fore.BLUE}███████{Fore.WHITE}╗{Fore.BLUE}██{Fore.WHITE}╗   {Fore.BLUE}██{Fore.WHITE}╗{Fore.BLUE}███████{Fore.WHITE}╗
-                        {Fore.WHITE}╚══{Fore.BLUE}███{Fore.WHITE}╔╝{Fore.BLUE}██{Fore.WHITE}╔════╝{Fore.BLUE}██{Fore.WHITE}║   {Fore.BLUE}██{Fore.WHITE}║{Fore.BLUE}██{Fore.WHITE}╔════╝
-                          {Fore.BLUE}███{Fore.WHITE}╔╝ {Fore.BLUE}█████{Fore.WHITE}╗  {Fore.BLUE}██{Fore.WHITE}║   {Fore.BLUE}██{Fore.WHITE}║{Fore.BLUE}███████{Fore.WHITE}╗
-                         {Fore.BLUE}███{Fore.WHITE}╔╝  {Fore.BLUE}██{Fore.WHITE}╔══╝  {Fore.BLUE}██{Fore.WHITE}║   {Fore.BLUE}██{Fore.WHITE}║╚════{Fore.BLUE}██{Fore.WHITE}║
-                        {Fore.BLUE}███████{Fore.WHITE}╗{Fore.BLUE}███████{Fore.WHITE}╗╚{Fore.BLUE}██████{Fore.WHITE}╔╝{Fore.BLUE}███████{Fore.WHITE}║
-                        {Fore.WHITE}╚══════╝╚══════╝ ╚═════╝ ╚══════╝
-
-                        {Fore.CYAN}Nitro Sniper {Fore.CYAN}- 
-                        {Fore.CYAN}Giveaway Sniper {Fore.CYAN}- 
-                        {Fore.CYAN}Prefix {Fore.CYAN}- {Fore.WHITE}[{Fore.CYAN}{prefix}{Fore.WHITE}]
-                        {Fore.CYAN}                                Commands
-{Fore.WHITE}________________________________________________________________________________________________________________________
-        '''+Fore.RESET)
-
-def RPC():
+def init():
+  colorama.init()
+  
+  # -- init rpc -- #
   client_id = "750864113248501898"
   RPC = Presence(client_id)
   RPC.connect()
-  (RPC.update(state="Coming Soon.", details="root@zeus~#", large_image="big", small_image="small"))
+  RPC.update(state="Coming Soon.", details="root@zeus~#", large_image="big", small_image="small")
 
+  # -- get prefix from user -- #
+  prefix_str = input("Enter The Desired Prefix For Your Selfbot: ")
 
+  if len(prefix_str) > PREFIX_LENGTH:
+    print("Prefix len is greater than max %d" % PREFIX_LENGTH)
+    sys.exit(1)
+  
+  return prefix_str
 
+# -- Entry Point -- #
+print("Make sure you create an errors.log and config.json file")
 
-print(f"{Fore.CYAN}Enter Your Desired Prefix:{Fore.WHITE}")
-prefix = input(" ")
-os.system('cls')
-
-RPC()
-colorama.init()
-startprint()
-
+# -- get prefix -- #
+prefix = init()
 
 client = commands.Bot(
-    description='Zeus Selfbot',
-    command_prefix=f"{prefix}",
-    self_bot=True
+  description=BOT_NAME,
+  command_prefix=prefix,
+  self_bot=True
 )
-client.remove_command('help')
-loop = asyncio.get_event_loop()
-clear = lambda: os.system('cls')
-t = time.localtime()
-current_time = time.strftime("%H:%M:%S", t)
-start_time = datetime.datetime.utcnow()
-loop = asyncio.get_event_loop()
 
-token = Loader("config.json").main()[0]
- 
+# -- load cog -- #
+@client.command()
+async def load(ctx, extension):
+  client.load_extension(f'cogs.{extension}')
+
+# -- unload cog -- #
+@client.command()
+async def unload(ctx, extension):
+  client.unload_extension(f'cogs.{extension}')
+
+
+# -- load all cogs in same directory by looping through -- #
+for file_name in os.listdir('./cogs'):
+  if file_name.endswith('.py'):
+    client.load_extension(f'cogs.{file_name[:-3]}')
+
+# -- print welcome message shit -- #
+print(BANNER(prefix))
+
+# -- start bot -- #
+client.remove_command('help')
+token = Loader(CONFIG_FILE_NAME).main()[0]
 client.run(token)
+
+
+
+
+
+
+
+
+
+
+
+
