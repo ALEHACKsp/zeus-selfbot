@@ -16,7 +16,7 @@ from pypresence import Presence
 # -- local libraries and imports -- #
 from config import Config
 
-
+# -- entry point -- #
 if len(sys.argv) < 2:
   print(f"Usage: <{sys.argv[0]}> <json-config>")
   quit()
