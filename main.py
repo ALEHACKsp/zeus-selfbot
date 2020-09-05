@@ -1,7 +1,7 @@
-"""
-Authors: k1rk and charge
-Copyright: Zeus Selbot Source Code (C)
-"""
+# -- COPYRIGHT -- #
+# Authors: K1rk, and Charge.
+# Copyright: Zeus Selfbot Source Code (©)
+# -- COPYRIGHT -- #
 
 # -- standard libraries -- #
 import os
