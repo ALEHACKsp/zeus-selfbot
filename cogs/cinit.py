@@ -7,6 +7,7 @@ Copyright: Zeus Selfbot Source Code (©)
 import sys
 import logging
 import asyncio
+import requests
 
 # -- non-standard libraries -- #
 import discord
@@ -44,18 +45,34 @@ class CogInit(commands.Cog):
       logging.error(e, exc_info=True)
   
   @commands.command(name='spam')
-  async def spam(self, ctx, amount=1):
-    pass
-
+  async def spam(self, ctx, amount: int, *, message):
+    await ctx.message.delete()
+    for _i in range(amount):
+      await ctx.send(message)
+   
   @commands.command(name='av')
   async def get_av(self, ctx, member: discord.Member):
     await ctx.send(
       embed=self.embed.new_raw_embed(
         title='Found AV',
-        description=f'showing profile picture for {member.mention}',
+        description=f'Showing profile picture for, {member.mention}',
         image_url=member.avatar_url
       )
-    )     
+    )    
+
+@commands.command(name='covid')
+async def getcovid(self, ctx):
+  r = requests.get("https://api.covid19api.com/world/total")
+  res = r.json()
+  totalc = 'TotalConfirmed'
+  totald = 'TotalDeaths'
+  totalr = 'TotalRecovered'
+  await ctx.send(
+    embed=self.embed.new_raw_embed(
+      title='COVID-19 Stats',
+      description=f'Deaths | **{res[totald]}**\nConfirmed | **{res[totalc]}**\nRecovered | **{res[totalr]}**'
+    )
+  )
 
   @commands.command(name='del', aliases=['purge', 'clear'])
   async def clear(self, ctx, amount=None):
