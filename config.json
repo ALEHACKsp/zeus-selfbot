@@ -1,0 +1,37 @@
+{
+  "token": "",
+
+  "embed": {
+    "title": "",
+    "description": "",
+    "thumbnail": "",
+    "author": "hacker bobby",
+    "author_url": "",
+    "footer": "zeus selfbot",
+    "footer_url": "",
+    "image_url": "",
+    "color": "",
+    "delete": "",
+    "link": "nil"
+  },
+
+  "bot": {
+    "name": "",
+    "prefix": "",
+    "presence": false,
+    "nitro_snipe": false,
+    "giveaway_snipe": false,
+    "log_messages": false
+  },
+
+  "presence": {
+    "idle": false,
+    "details": "Zeus SelfBot"
+  },
+
+  "log": {
+    "user_ids": [
+      ".k#1999"
+    ]
+  }
+}
