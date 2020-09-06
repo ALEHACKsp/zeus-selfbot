@@ -1,0 +1,82 @@
+"""
+Authors: K1rk, and Charge.
+Copyright: Zeus Selfbot Source Code (©)
+"""
+
+# -- standard libraries -- #
+import sys
+import logging
+import asyncio
+
+# -- non-standard libraries -- #
+import discord
+from discord.ext import commands
+
+# -- local libraries and imports -- # 
+
+
+class CogInit(commands.Cog):
+  def __init__(self, client):
+    '''
+    The Main Cog with some default event listeners and basic commands
+    Note: we wrap in try accept as we want errors to be caught and logged
+    '''
+    self.client = client
+    self.config = client.config
+    self.embed = client.embeds
+  
+  async def cog_command_error(self, ctx, error):
+    '''
+    called when an error occurs in this cog
+    will log to error file with speicifed time and info
+    '''
+    print(error)
+
+  @commands.Cog.listener()
+  async def on_ready(self):
+    print(f"Bot Started, Logged In As |---> {self.client.user}")
+
+  @commands.Cog.listener() 
+  async def on_message(self, ctx):
+    try:
+      author = str(ctx.author)
+    except Exception as e:
+      logging.error(e, exc_info=True)
+  
+  @commands.command(name='spam')
+  async def spam(self, ctx, amount=1):
+    pass
+
+  @commands.command(name='av')
+  async def get_av(self, ctx, member: discord.Member):
+    await ctx.send(
+      embed=self.embed.new_raw_embed(
+        title='Found AV',
+        description=f'showing profile picture for {member.mention}',
+        image_url=member.avatar_url
+      )
+    )     
+
+  @commands.command(name='del', aliases=['purge', 'clear'])
+  async def clear(self, ctx, amount=None):
+    '''simple function to purge/delete messages from a channel by the user'''
+    if not isinstance(ctx.channel, discord.DMChannel) and \
+      not isinstance(ctx.channel, discord.GroupChannel):
+      await ctx.channel.purge(
+        limit=amount if not amount else \
+          int(amount), check=lambda m: m.author == ctx.author
+      )  
+      return
+
+    # -- channel is dm or group channel so we must use a diffrent way to bulk delete -- #
+    async for msg in ctx.channel.history(
+      limit=amount if not amount else \
+        int(amount)
+      ):
+      if msg.author == ctx.author:
+        await msg.delete()
+        await asyncio.sleep(0.56)
+  
+# -- setup cog -- #
+def setup(client):
+  client.add_cog(CogInit(client))
