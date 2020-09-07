@@ -15,6 +15,16 @@ from discord.ext import commands
 class CogError(commands.Cog):
   def __init__(self, client):
     self.client = client
+  
+  @commands.Cog.listener()
+  async def on_error(self, ctx, error):
+    '''function for handling errors that can occur''' 
+    pass
+    
+    
+
+
+
 
 # -- setup cog -- #
 def setup(client):
