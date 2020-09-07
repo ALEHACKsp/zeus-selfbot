@@ -1,6 +1,5 @@
 # Zeus SelfBot
-An advanced discord self-bot in the discord.py rewrite
-
+The Most Advanced dynamically customizable selfbot on the market!
 ## Requirments
 Python Version 3.8
 
