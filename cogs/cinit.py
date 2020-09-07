@@ -66,6 +66,7 @@ class CogInit(commands.Cog):
 
   @commands.command(name='av')
   async def get_av(self, ctx, member: discord.Member):
+    await ctx.message.delete()
     await ctx.send(
       embed=self.embed.new_raw_embed(
         title='Found Avatar',
@@ -76,6 +77,7 @@ class CogInit(commands.Cog):
 
   @commands.command(name='covid')
   async def getcovid(self, ctx):
+    await ctx.message.delete()
     r = requests.get("https://api.covid19api.com/world/total")
     res = r.json()
     totalc = 'TotalConfirmed'
@@ -90,6 +92,7 @@ class CogInit(commands.Cog):
 
   @commands.command(name='del', aliases=['purge', 'clear', 'd'])
   async def clear(self, ctx, amount=None):
+    await ctx.message.delete()
     '''simple function to purge/delete messages from a channel by the user'''
     if not isinstance(ctx.channel, discord.DMChannel) and \
       not isinstance(ctx.channel, discord.GroupChannel):
