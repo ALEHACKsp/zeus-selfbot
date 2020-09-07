@@ -8,9 +8,12 @@ import sys
 import logging
 import asyncio
 import requests
+import json
+import os
 
 # -- non-standard libraries -- #
 import discord
+from selenium import webdriver
 from discord.ext import commands
 
 # -- local libraries and imports -- # 
@@ -49,32 +52,43 @@ class CogInit(commands.Cog):
     await ctx.message.delete()
     for _i in range(amount):
       await ctx.send(message)
-   
+
+  @commands.command(name='embed')
+  async def embeds(self, ctx, * , message):
+     await ctx.message.delete()
+     await ctx.send(
+      embed=self.embed.new_raw_embed(
+        title=' ',
+        description=f"{message}"
+
+      )
+     )
+
   @commands.command(name='av')
   async def get_av(self, ctx, member: discord.Member):
     await ctx.send(
       embed=self.embed.new_raw_embed(
-        title='Found AV',
+        title='Found Avatar',
         description=f'Showing profile picture for, {member.mention}',
         image_url=member.avatar_url
       )
-    )    
-
-@commands.command(name='covid')
-async def getcovid(self, ctx):
-  r = requests.get("https://api.covid19api.com/world/total")
-  res = r.json()
-  totalc = 'TotalConfirmed'
-  totald = 'TotalDeaths'
-  totalr = 'TotalRecovered'
-  await ctx.send(
-    embed=self.embed.new_raw_embed(
-      title='COVID-19 Stats',
-      description=f'Deaths | **{res[totald]}**\nConfirmed | **{res[totalc]}**\nRecovered | **{res[totalr]}**'
     )
-  )
 
-  @commands.command(name='del', aliases=['purge', 'clear'])
+  @commands.command(name='covid')
+  async def getcovid(self, ctx):
+    r = requests.get("https://api.covid19api.com/world/total")
+    res = r.json()
+    totalc = 'TotalConfirmed'
+    totald = 'TotalDeaths'
+    totalr = 'TotalRecovered'
+    await ctx.send(
+      embed=self.embed.new_raw_embed(
+        title='COVID-19 Stats',
+        description=f'Deaths | **{res[totald]}**\nConfirmed | **{res[totalc]}**\nRecovered | **{res[totalr]}**'
+      )
+   )
+
+  @commands.command(name='del', aliases=['purge', 'clear', 'd'])
   async def clear(self, ctx, amount=None):
     '''simple function to purge/delete messages from a channel by the user'''
     if not isinstance(ctx.channel, discord.DMChannel) and \
@@ -93,6 +107,8 @@ async def getcovid(self, ctx):
       if msg.author == ctx.author:
         await msg.delete()
         await asyncio.sleep(0.56)
+
+  
   
 # -- setup cog -- #
 def setup(client):
