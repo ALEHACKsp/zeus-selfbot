@@ -1,0 +1,26 @@
+Time: 07-Sep-20 23:12:09 - Error: PyNaCl is not installed, voice will NOT be supported File:  client.py
+Time: 07-Sep-20 23:12:34 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:13:31 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:13:59 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:13:59 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:14:23 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:15:10 - Error: Somehow timed out waiting for chunks. File:  state.py
+Time: 07-Sep-20 23:16:32 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:16:52 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:18:17 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:18:22 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:18:26 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:19:41 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:19:52 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:20:30 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:21:03 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:21:15 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:21:22 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:22:34 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:23:03 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:23:14 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:23:28 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:23:45 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:23:56 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:25:00 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py
+Time: 07-Sep-20 23:25:32 - Error: PRESENCE_UPDATE referencing an unknown guild ID: None. Discarding. File:  state.py

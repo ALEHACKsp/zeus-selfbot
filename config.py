@@ -5,7 +5,7 @@ Copyright: Zeus Selfbot Source Code (©)
 
 # -- standard libraries -- #
 import json
-from sys import stderr
+from sys import stderr, exit
 
 # -- non-standar libraries - #
 import discord 
@@ -44,12 +44,12 @@ class Config:
   default_config = {
     
     # -- default values for embeds sent by the bot -- #
-    "embed": {
+    "embeds": {
       "title": "Buy Zeus Selfbot For Yourself today !",
       "description": "Advanced dynamically customizable selfbot",
-      "author": "Zeus",
+      "author": "Buy Zeus Selfbot For Yourself today !",
       "author_url": "https://static.dribbble.com/users/1957224/screenshots/6208642/1_2x.jpg",
-      "footer": "Zeus zz",
+      "footer": "Location: In Hiding",
       "footer_url": "https://static.dribbble.com/users/1957224/screenshots/6208642/1_2x.jpg",
       "image_url": "https://static.dribbble.com/users/1957224/screenshots/6208642/1_2x.jpg",
       "color": color_lookup['black'],
@@ -62,23 +62,15 @@ class Config:
     "bot": {
       "name": "Zeus Selfbot",
       "prefix": ".",
-      "presence": True,
-      "nitro_snipe": True,
-      "giveaway_snipe": True,
-      "log_messages": True
+      "presence": "on",
+      "nitro_snipe": "on",
+      "giveaway_snipe": "on",
     },
 
     # -- default values for the bot's rich presence -- #
     "presence": {
-      "idle": False,
-      "details": "Root@Zeus-$"
-    },
-
-    # -- default values for the bot's message log feature -- #
-    "log": {
-      "user_ids": [
-        ""
-      ]
+      "state": "Coming Soon - Zeus",
+      "details": "Advanced Dynamic Selfbot"
     }
   }
 
@@ -89,17 +81,16 @@ class Config:
   @staticmethod
   def die(e):
     print(
-      f"""
-      Zeus Selfbot [ERROR]
-      Unkown Error Occured Due to one of these 
-        - loading the json from the config file
-      Actual Exception | Error: {getattr(e, 'message', repr(e)) if e else "nil"}
-      """, file=stderr
+      "Zeus Selfbot [ERROR]\n"
+      "Unkown Error Occured Due to one of the listed errors\n"
+      "1: loading the json from the config file\n"
+      f"Actual Exception | Error: {getattr(e, 'message', repr(e)) if e else 'nil'}",
+      file=stderr
     )
-    quit()  
+    exit(-1)
   
   def quick_load(self):
-    '''quick function to return the config'''
+    """quick function to return the config"""
     self.load()
     return self.config
 
@@ -110,34 +101,53 @@ class Config:
 
         # -- load config -- #
         config = json.load(f)
-        
-        # -- make sure token is there -- # 
+
+         # -- make sure token is there -- # 
         if not config.get('token'):
           Config.die('please provide a token in the json config file')
 
-        # -- check if all other values are there -- # 
-        for key in Config.default_config.keys():
-          if config.get(key) is None:
-            Config.die(f'Missing Key: [{key}]')
-          elif not config.get(key):
-            config[key] = Config.default_config[key]
+        embed_keys = Config.default_config['embeds'].keys()
+        bot_keys = Config.default_config['bot'].keys()
+        presence_keys = Config.default_config['presence'].keys()
 
-          nested = Config.default_config[key]
-          # -- make sure key is a dict -- #
-          if type(nested) == dict:
-            for nkey in nested.keys():
-              if config[key].get(nkey) is None:
-                Config.die(f'Missing Key: [{nkey}]')
-              elif not config[key].get(nkey):
-                config[key][nkey] = Config.default_config[key][nkey]
-              elif config[key].get(nkey) == "nil":
-                config[key][nkey] = ""
-              elif nkey == "color":
-                config[key][nkey] = Config.color_lookup.get(config[key][nkey], \
-                   Config.default_config['embed']['color'])
+        if config.get('embeds') is None or config.get('bot') \
+          is None or config.get('presence') is None:
+          Config.die("missing key (embeds or bot or presence)")
+        
+        # -- parse embeds key -- #
+        for key in embed_keys:
+          if config['embeds'].get(key) is None:
+            Config.die(f"missing field: [{key}] in [embeds] header")
+          if key == "delete":
+            if type(config['embeds']['delete']) != int:
+              Config.die("delete field in embeds header must be of int")
+            if config['embeds']['delete'] not in range(1, 999):
+              Config.die("delete field in embeds header must be in range 1-999")
+          if config['embeds'].get(key) == "":
+            config['embeds'][key] = Config.default_config['embeds'][key]
+            continue
+          if config['embeds'].get(key) == "nil":
+            config['embeds'][key] = ""
+        
+        # -- parse bot keys -- #
+        for i, v in enumerate(bot_keys):
+          if config['bot'].get(v) is None:
+            Config.die(f"missing field: [{v}] in [bot] header")
+          if i > 1:
+            if config['bot'].get(v) not in ['on', 'off']:
+              Config.die(f"field: [{v}] in [bot] header must be on or off")
+          if config['bot'].get(v) == "":
+            config['bot'][v] = Config.default_config['bot'][v]
+            
+        # -- parse presence keys -- #
+        for k in presence_keys:
+          if config['presence'].get(k):
+            Config.die(f"missing field: [{k}] in [presence] header")
+          if config['presence'].get(k) == "":
+            config['presence'][k] = Config.default_config['presence'][k]
 
       self.config = config
     
-     # -- handle fatal exception -- #
+    # -- handle fatal exception -- #
     except Exception as error:
       Config.die(error)

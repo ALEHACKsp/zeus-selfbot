@@ -16,8 +16,8 @@ from config import Config
 
 class Embeds:
   def __init__(self, config):
-    self.config = config['embed']
-    self.url = config['embed']['link']
+    self.config = config['embeds']
+    self.url = config['embeds']['link']
     self.author = self.config['author']
     self.author_url = self.config['author_url']
     self.footer = self.config['footer']
@@ -57,7 +57,7 @@ class Embeds:
     if self.thumbnail:
       e.set_thumbnail(url=self.thumbnail)
     
-    if len(fields) == 0:
+    if len(fields) != 0:
       # -- set fields -- #
       for i in fields:
         e.add_field(name=i[0], value=i[1], inline=i[2])
@@ -110,10 +110,11 @@ class Embeds:
     if thumbnail:
       e.set_thumbnail(url=thumbnail)
     
-    if len(fields) == 0:
+    if len(fields) != 0:
       # -- set fields -- #
       for i in fields:
         e.add_field(name=i[0], value=i[1], inline=i[2])
     
     # -- return new embed -- #
     return e
+  

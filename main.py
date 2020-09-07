@@ -26,9 +26,8 @@ async def refresh(ctx):
     if file_name.endswith('.py'):
       client.load_config()
       client.load_embeds()
-      await client.load_presence()
       client.unload_extension(f'cogs.{file_name[:-3]}')
       client.load_extension(f'cogs.{file_name[:-3]}')
-  await ctx.send("Cogs reloaded")
+  await ctx.send("cogs reloaded", delete_after=3)
 
 client._start()

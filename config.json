@@ -1,37 +1,30 @@
 {
   "token": "",
 
-  "embed": {
+  "embeds": {
     "title": "",
     "description": "",
     "thumbnail": "",
-    "author": "hacker bobby",
+    "author": "",
     "author_url": "",
-    "footer": "zeus selfbot",
+    "footer": "",
     "footer_url": "",
     "image_url": "",
     "color": "",
-    "delete": "",
+    "delete": 5,
     "link": "nil"
   },
 
   "bot": {
     "name": "",
-    "prefix": "",
-    "presence": false,
-    "nitro_snipe": false,
-    "giveaway_snipe": false,
-    "log_messages": false
+    "prefix": "^",
+    "presence": "on",
+    "nitro_snipe": "on",
+    "giveaway_snipe": "on"
   },
 
   "presence": {
-    "idle": false,
-    "details": "Zeus SelfBot"
-  },
-
-  "log": {
-    "user_ids": [
-      ".k#1999"
-    ]
+    "state": "",
+    "details": ""
   }
 }
