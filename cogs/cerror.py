@@ -17,14 +17,14 @@ class CogError(commands.Cog):
     self.client = client
   
   @commands.Cog.listener()
+  async def on_command_error(self, ctx, error):
+    '''function for handling errors that are command based''' 
+    print(error, "////")
+    
+  @commands.Cog.listener()
   async def on_error(self, ctx, error):
-    '''function for handling errors that can occur''' 
-    pass
-    
-    
-
-
-
+    '''function for handling errors that are non-command based''' 
+    print(error, "????")
 
 # -- setup cog -- #
 def setup(client):

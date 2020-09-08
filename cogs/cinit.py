@@ -27,6 +27,8 @@ class CogInit(commands.Cog):
   
   @commands.command(name='info')
   async def get_user_info(self, ctx, member: discord.User):
+    if self.config['bot']['delete'] == 'on':
+      await ctx.message.delete()
     await ctx.send(
       embed=self.embed.new_raw_embed(
         title="Found info",
@@ -42,6 +44,8 @@ class CogInit(commands.Cog):
 
   @commands.command(name='av')
   async def get_av(self, ctx, member: discord.Member):
+    if self.config['bot']['delete'] == 'on':
+      await ctx.message.delete()
     await ctx.send(
       embed=self.embed.new_raw_embed(
         title='Found profile picture',
@@ -52,11 +56,15 @@ class CogInit(commands.Cog):
 
   @commands.command(name='spam')
   async def spam_ctx(self, ctx, count: int, *, msg: str):
+    if self.config['bot']['delete'] == 'on':
+      await ctx.message.delete()
     for _ in range(count):
       await ctx.send(msg)
 
   @commands.command(name='embedspam')
   async def spam_embed_ctx(self, ctx, count: int, *, msg: str):
+    if self.config['bot']['delete'] == 'on':
+      await ctx.message.delete()
     e = self.embed.new_default_config_embed(
       title=f"Spamming: {msg}",
       description=f"Spamming G"

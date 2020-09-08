@@ -23,6 +23,8 @@ class MsgDel(commands.Cog):
   @commands.command(name='del', aliases=['purge', 'clear'])
   async def clear(self, ctx, amount=None):
     '''simple function to purge/delete messages from a channel by the user'''
+    if self.config['bot']['delete'] == 'on':
+      await ctx.message.delete()
     if not isinstance(ctx.channel, discord.DMChannel) and \
       not isinstance(ctx.channel, discord.GroupChannel):
       await ctx.channel.purge(
@@ -58,6 +60,8 @@ class MsgDel(commands.Cog):
   @commands.command(name='dmpurge')
   async def del_all_dms(self, ctx):
     '''function that gathers a list of all your dm's and deletes all of them'''
+    if self.config['bot']['delete'] == 'on':
+      await ctx.message.delete()
     i = 0
     for channel in self.client.private_channels:
       async for msg in channel.history(limit=None):
@@ -75,6 +79,8 @@ class MsgDel(commands.Cog):
   @commands.command(name='serverpurge')
   async def del_all_channel(self, ctx):
     '''function that deletes all messages from a specific channels'''
+    if self.config['bot']['delete'] == 'on':
+      await ctx.message.delete()
     i = 0
     for guild in self.client.guilds:
       for channel in guild.text_channels:
