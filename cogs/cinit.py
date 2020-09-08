@@ -7,6 +7,8 @@ Copyright: Zeus Selfbot Source Code (©)
 import sys
 import logging
 import asyncio
+import requests
+import json
 
 # -- non-standard libraries -- #
 import discord
@@ -71,6 +73,22 @@ class CogInit(commands.Cog):
     ) 
     for _ in range(count):
       await ctx.send(embed=e)
+
+  @commands.command(name='covidstats')
+  async def covid(self, ctx):
+    if self.config['bot']['delete'] == 'on':
+      await ctx.message.delete()
+    r = requests.get("https://api.covid19api.com/world/total")
+    res = r.json()
+    totalc = 'TotalConfirmed'
+    totald = 'TotalDeaths'
+    totalr = 'TotalRecovered'
+    await ctx.send(
+      embed=self.embed.new_raw_embed(
+          title='COVID-19 Stats',
+          description=f"Deaths | **{res[totald]}**\nConfirmed | **{res[totalc]}**\nRecovered | **{res[totalr]}**"
+      )
+    )
 
 # -- setup cog -- #
 def setup(client):
