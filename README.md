@@ -21,7 +21,7 @@ For Any Issues Regarding The Selfbot Please dm the ppl below on discord
 
 > note all the keys in the example json are required but the values can be changed (except the boolean values)
 
-> note: the config file must me named ```congi.json``` and be in the working directory of the selfbot
+> note: the config file must me named ```congig.json``` and be in the working directory of the selfbot
 
 > note: for any questions regarding the config please contact users in the credits section of the readme
 
