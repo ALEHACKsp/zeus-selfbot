@@ -11,16 +11,17 @@
     "footer_url": "",
     "image_url": "",
     "color": "",
-    "delete": 5,
+    "delete": 6,
     "link": "nil"
   },
 
   "bot": {
     "name": "",
-    "prefix": "^",
+    "prefix": "/",
     "presence": "on",
     "nitro_snipe": "on",
-    "giveaway_snipe": "on"
+    "giveaway_snipe": "on",
+    "delete": "on"
   },
 
   "presence": {

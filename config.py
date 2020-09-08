@@ -123,6 +123,11 @@ class Config:
               Config.die("delete field in embeds header must be of int")
             if config['embeds']['delete'] not in range(1, 999):
               Config.die("delete field in embeds header must be in range 1-999")
+            continue
+          if key == "color":
+            config['embeds'][key] = Config.default_config['embeds'].get(key, Config.color_lookup['black'])
+            config['embeds'][key] = Config.default_config['embeds'][key]
+            continue
           if config['embeds'].get(key) == "":
             config['embeds'][key] = Config.default_config['embeds'][key]
             continue
