@@ -90,6 +90,17 @@ class CogInit(commands.Cog):
       )
     )
 
+  @commands.command(name='embed')
+  async def embed_message(self, ctx,  *, message):
+    if self.config['bot']['delete'] == 'on':
+      await ctx.message.delete()
+    await ctx.send(
+      embed=self.embed.new_raw_embed(
+      title=' ',
+      description=f"{message}"
+      )
+    )
+
 # -- setup cog -- #
 def setup(client):
   client.add_cog(CogInit(client))
