@@ -20,7 +20,7 @@ class MsgDel(commands.Cog):
     self.embeds = client.embeds
     self.config = client.config
 
-  @commands.command(name='del', aliases=['purge', 'clear'])
+  @commands.command(name='del', aliases=['purge', 'clear', 'd'])
   async def clear(self, ctx, amount=None):
     '''simple function to purge/delete messages from a channel by the user'''
     if self.config['bot']['delete'] == 'on':
