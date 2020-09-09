@@ -65,7 +65,7 @@ The Bot May Take A few minutes to start please have some patience
 ```
 #### all possible color values in the embed color field
 
-```
+```py
  'blue'
  'blurple'
  'dark_blue'
