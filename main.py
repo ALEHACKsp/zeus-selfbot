@@ -10,6 +10,8 @@ from time import sleep
 
 # -- 3rd party libararies -- #
 import discord
+import colorama
+from colorama import Fore, init, Style, Back
 from discord.ext import commands
 from pypresence import Presence
 
@@ -58,6 +60,46 @@ class Zeus(commands.Bot):
         large_text=self.config['presence'].hover_big
       )
 
+  def clear_screen(self):
+    os.system("cls")
+
+  def startprint(self):
+    print(f'''
+    
+{Fore.CYAN}███████{Fore.WHITE}╗{Fore.CYAN}███████{Fore.WHITE}╗{Fore.CYAN}██{Fore.WHITE}╗   {Fore.CYAN}██{Fore.WHITE}╗{Fore.CYAN}███████{Fore.WHITE}╗
+{Fore.WHITE}╚══{Fore.CYAN}███{Fore.WHITE}╔╝{Fore.CYAN}██{Fore.WHITE}╔════╝{Fore.CYAN}██{Fore.WHITE}║   {Fore.CYAN}██{Fore.WHITE}║{Fore.CYAN}██{Fore.WHITE}╔════╝
+  {Fore.CYAN}███{Fore.WHITE}╔╝ {Fore.CYAN}█████{Fore.WHITE}╗  {Fore.CYAN}██{Fore.WHITE}{Fore.WHITE}║   {Fore.CYAN}██{Fore.WHITE}║{Fore.CYAN}███████{Fore.WHITE}╗
+ {Fore.CYAN}███{Fore.WHITE}╔╝  {Fore.CYAN}██{Fore.WHITE}╔══╝  {Fore.CYAN}██{Fore.WHITE}║  {Fore.CYAN} ██{Fore.WHITE}║╚════{Fore.CYAN}██{Fore.WHITE}║
+{Fore.CYAN}███████{Fore.WHITE}╗{Fore.CYAN}███████{Fore.WHITE}╗╚{Fore.CYAN}██████{Fore.WHITE}╔╝{Fore.CYAN}███████{Fore.WHITE}║
+{Fore.WHITE}╚══════╝╚══════╝ ╚═════╝ ╚══════╝
+By, {Fore.CYAN}.k{Fore.WHITE}, and{Fore.CYAN} charge
+
+
+                                                      {Fore.CYAN}Commands
+{Fore.WHITE}_______________________________________________________________________________________________________________________                                
+    
+    
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}] {Fore.CYAN} commands {Fore.WHITE}| Shows all command categories
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}messagetools {Fore.WHITE}| Shows all message tools
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}networktools {Fore.WHITE}| Shows all network tools
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}fun {Fore.WHITE}| Shows all fun commands
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}credits {Fore.WHITE}| Shows credits
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}poll {Fore.WHITE}| Creates a poll with given question 
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}covidstats {Fore.WHITE}| Shows current covid-19 stats
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}purge {Fore.WHITE}| Clears all messages in channel
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}dmpurge {Fore.WHITE}| Clears all messages in dms
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}serverpurge {Fore.WHITE}| Clears all dms in server
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}spam {Fore.WHITE}| Spams given message for given amount of time
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}embedspam {Fore.WHITE}| Spams given message in embed form
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}getip {Fore.WHITE}| Gets ip from host
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}ping {Fore.WHITE}| Pings given ip address 
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}gethost {Fore.WHITE}| Gets host from given ip
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}iplookup {Fore.WHITE}| Gets geo location from given ip addy
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}serverinfo {Fore.WHITE}| Grabs server info
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}userinfo {Fore.WHITE}| Grabs user info
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]  {Fore.CYAN}uav {Fore.WHITE}| Grabs user's avatar
+{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}] {Fore.CYAN} sba {Fore.WHITE}| Grabs server banner''')
+
   def get_cogs(self):
     return [
       f'cogs.{x[:-3]}' for x in os.listdir('./cogs')
@@ -91,7 +133,9 @@ class Zeus(commands.Bot):
       self_bot=True
     )
     self._load()
-    #self.load_rp()
+    self.load_rp()
+    self.clear_screen()
+    self.startprint()
 
   def go(self):
     super().remove_command('help')

@@ -25,7 +25,7 @@ class Embeds(BaseModel):
   footer = 'Zeus Selfbot Inc. (c)'
   footer_url: Optional[str] = None
   image_url: Optional[str] = None
-  link = 'https://www.youtube.com/'
+  link = ''
   thumbnail: Optional[str] = None
   delete_after = 5
   color = 0x000000
