@@ -1,181 +1,251 @@
-"""
-Authors: K1rk, and Charge.
-Copyright: Zeus Selfbot Source Code (©)
-"""
+''' 
+Author: k1rk and charge
+Copyright: Zeus Selfbot (c) inc.
+'''
 
-# -- standard libraries -- #
-import sys
+# -- standard libaries -- #
 import logging
 import asyncio
-import requests
-import json
 
-# -- non-standard libraries -- #
+# -- 3rd party libararies -- #
 import discord
 from discord.ext import commands
+import requests
 
-# -- local libraries and imports -- # 
+# -- local libraries -- #
+import cogs.utils.util_checks as checks
 
-class messages(commands.Cog):
-  def __init__(self, client):
-    self.client = client
-    self.embeds = client.embeds
-    self.config = client.config
+class Messaging(commands.Cog):
+  link = 'https://discordapp.com/api/v6/entitlements/gift-codes/'
+  def __init__(self, bot):
+    logging.info('Messages Cog Loaded')
+    self.copy = []
+    self.config = bot.config
+    self.embeds = bot.embeds
+    self.bot = bot
+  
+  @commands.command(name='type')
+  async def fake_type(self, ctx, amount: int):
+    if self.config.bot.delete:
+      await ctx.message.delete()
+    async with ctx.typing():
+      await asyncio.sleep(amount)
 
-  @commands.command(name='del', aliases=['purge', 'clear', 'd'])
-  async def clear(self, ctx, amount=None):
-    '''simple function to purge/delete messages from a channel by the user'''
-
-    if not isinstance(ctx.channel, discord.DMChannel) and \
-      not isinstance(ctx.channel, discord.GroupChannel):
-      await ctx.channel.purge(
-        limit=amount if not amount else \
-          int(amount), check=lambda m: m.author == ctx.author and \
-            not m.is_system()
-      )
-      await ctx.send(
-        embed=self.embeds.new_default_config_embed(
-          title="Cleared Chats",
-          description=f"Amount: {amount if amount else 9999}"
-        ), delete_after=self.config['embeds']['delete']
-      )  
-      return
-
-    # -- channel is dm or group channel so we must use a diffrent way to bulk delete -- #
+  @commands.command(name='purge')
+  async def purge_ctx(self, ctx, amount=None):
+    if self.config.bot.delete:
+      await ctx.message.delete()
+  
     i = 0
-    async for msg in ctx.channel.history(
-      limit=amount if not amount else \
-        int(amount)
-      ):
-      if msg.author == ctx.author and not msg.is_system():
+    async for message in ctx.channel.history(limit=amount):
+      if message.author == self.bot.user and not message.is_system():
+        await message.delete()
         i += 1
-        await msg.delete()
+   
     await ctx.send(
-        embed=self.embeds.new_default_config_embed(
-          title="Cleared chats",
-          description=f"Amount: {i}"
-        ), 
-        delete_after=self.config['embeds']['delete']
-      )  
-
-  @commands.command(name='dmpurge')
-  async def del_all_dms(self, ctx):
-    '''function that gathers a list of all your dm's and deletes all of them'''
-
-    i = 0
-    for channel in self.client.private_channels:
-      async for msg in channel.history(limit=None):
-        if msg.author == ctx.author and not msg.is_system():
-          await msg.delete()
-          i += 1
-    await ctx.send(
-      embed=self.embeds.new_default_config_embed(
-        title="Cleared all dm chats",
-        description=f"Amount: {i}"
-      ),
-      delete_after=self.config['embed']['delete']
+      embed=self.embeds.new_default_embed(
+        title='Cleared Messages In Current Chat',
+        description='Amount: %d' % i
+      ), 
+      delete_after=self.config.embeds.delete_after
     )
-
-  @commands.command(name='serverpurge')
-  async def del_all_channel(self, ctx):
-    '''function that deletes all messages from a specific channels'''
-
+  
+  @commands.command(name='purgefilter')
+  async def purge_ctx_by_filter(self, ctx, word: str, amount=None):
+    if self.config.bot.delete:
+      await ctx.message.delete()
+  
     i = 0
-    for guild in self.client.guilds:
-      for channel in guild.text_channels:
-        async for msg in channel.history(limit=None):
-          if msg.author == ctx.author and not msg.is_system():
-            await msg.delete()
-            i += 1
+    async for message in ctx.channel.history(limit=amount):
+      if (
+        message.author == self.bot.user 
+        and not message.is_system() 
+        and word.casefold() in \
+          message.content.casefold()
+      ):
+        await message.delete()
+        i += 1
+   
     await ctx.send(
-    embed=self.embeds.new_default_config_embed(
-      title="Cleared all channel chats",
-      description=f"Amount: {i}"
-    ),
-    delete_after=self.config['embed']['delete']
-  )
+      embed=self.embeds.new_default_embed(
+        title='Cleared Messages In Current Chat',
+        description='Amount: %d, Filter: %s' % (
+          i, word
+        )
+      ), 
+      delete_after=self.config.embeds.delete_after
+    )
+    
+  @commands.command(name='dmpurge') 
+  async def purge_dms(self, ctx, amount=None):
+    if self.config.bot.delete:
+      await ctx.message.delete()
+    
+    i = 0
+    for channel in self.bot.private_channels:
+      async for message in channel.history(limit=None):
+        if message.author == self.bot.user and not message.is_system():
+          await message.delete()
+          i += 1
+
+    await ctx.send(
+      embed=self.embeds.new_default_embed(
+        title='Cleared Messages In Every Server',
+        description='Amount: %d' % i
+      ), 
+      delete_after=self.config.embeds.delete_after
+    )
+    
+  @commands.command(name='channelpurge')
+  async def purge_channels(self, ctx):
+    if self.config.bot.delete:
+      await ctx.message.delete()
+    
+    i = 0
+    async for channel in self.bot.get_all_channels():
+      async for message in channel.history(limit=None):
+        if message.author == self.bot.user and not message.is_system():
+          await message.delete()
+          i += 1
+    
+    await ctx.send(
+      embed=self.embeds.new_default_embed(
+        title='Cleared Messages In Every Server',
+        description='Amount: %d' % i
+      ), 
+      delete_after=self.config.embeds.delete_after
+    )
 
   @commands.command(name='spam')
-  async def spam_ctx(self, ctx, count: int, *, msg: str):
+  async def spam_ctx(self, ctx, amount: int, *, message: str):
+    if self.config.bot.delete:
+      await ctx.message.delete()
+    for _ in range(amount):
+      await ctx.send(
+       message
+      )
+  
+  @commands.command(name='spamembed')
+  async def spam_ctx_embed(self, ctx, amount: int, *, message: str):
+    if self.config.bot.delete:
+      await ctx.message.delete()
+    for _ in range(amount):
+      await ctx.send(
+        embed=self.embeds.new_default_embed(
+          title=message
+        )
+      )
     
-    for _ in range(count):
-      await ctx.send(msg)
+  @commands.command(name='stopcopy')
+  async def stop_copy_user(self, ctx, user: str):
+    if (user := checks.get_user(user, ctx, self.bot)) is None and user != ctx.author:
+      if self.config.bot.delete:
+        await ctx.message.delete()
+      return
 
-  @commands.command(name='embedspam')
-  async def spam_embed_ctx(self, ctx, count: int, *, msg: str):
-    
-    embed = self.embeds.new_default_embed(
-      title=f"Spamming: {msg}",
-      description=f"Spamming G"
-    ) 
-    for _ in range(count):
-      await ctx.send(embed=embed)
+    if user.id not in self.copy:
+      if self.config.bot.delete:
+        await ctx.message.delete()
+      return
+    self.copy.remove(user.id)
+    if self.config.bot.delete:
+      await ctx.message.delete()
 
-  @commands.command(name='covidstats')
-  async def covid_status(self, ctx):
-    r = requests.get("https://api.covid19api.com/world/total")
-    res = r.json()
-    totalc = 'TotalConfirmed'
-    totald = 'TotalDeaths'
-    totalr = 'TotalRecovered'
     await ctx.send(
-      embed = self.embeds.new_default_embed(
-          title='COVID-19 Stats',
-          description=f"Deaths | **{res[totald]}**\nConfirmed | **{res[totalc]}**\nRecovered | **{res[totalr]}**"
+      embed=self.embeds.new_default_embed(
+        title=f'Stopped Copying User',
+        description=f'Stopped Copying {user.mention}'
       ),
-        delete_after=self.config['embeds'].delete_after
-      )
-
-    if self.config['bot'].delete:
-        await ctx.message.delete()
-
-  @commands.command(name='embed')
-  async def emsg(self, ctx, *, message):
-    await ctx.send(
-      embed = self.embeds.new_default_embed(
-        title=f" ",
-        description=f"{message}"
-       
-         ),
-        delete_after=self.config['embeds'].delete_after
-      )
-
-    if self.config['bot'].delete:
-        await ctx.message.delete()
-
-  @commands.command(name='poll')
-  async def poll_cmd(self, ctx, *, question: str):
-    msg = await ctx.send(
-      embed = self.embeds.new_default_embed(
-        title=f"Poll!",
-        description=f"{question}"
-
-      )
+      delete_after=self.config.embeds.delete_after
     )
-    try:
+
+  @commands.command(name='startcopy')
+  async def copy_user(self, ctx, user: str):
+    if (user := checks.get_user(user, ctx, self.bot)) is None and user != ctx.author:
+      if self.config['bot'].delete:
         await ctx.message.delete()
-    except:
-        pass
-    if ctx.guild.id == 207943928018632705:
-        # Essential :sexthumb:
-        yes_thumb = discord.utils.get(
-            ctx.guild.emojis, id=287711899943043072)
-        no_thumb = discord.utils.get(
-            ctx.guild.emojis, id=291798048009486336)
-    else:
-        yes_thumb = "👍"
-        no_thumb = "👎"
-    await msg.add_reaction(yes_thumb)
-    await msg.add_reaction(no_thumb)
+      return
+
+    if user in self.copy:
+      if self.config.bot.delete:
+        await ctx.message.delete()
+      return
+    self.copy.append(user.id) 
+    if self.config.bot.delete:
+      await ctx.message.delete()
+
+    await ctx.send(
+      embed=self.embeds.new_default_embed(
+        title=f'Copying User',
+        description=f'Now Copying {user.mention}'
+      ),
+      delete_after=self.config.embeds.delete_after
+    )
+  
+  @commands.Cog.listener()
+  async def on_message(self, ctx):
+    # -- copying -- #
+    if ctx.author.id in self.copy and ctx.content:
+      await ctx.channel.send(ctx.content)
+      return
+
+    # -- get nitro -- #
+    if self.config.bot.sniper:
+      if (code := checks.is_nitro(ctx.content)):
+        result = requests.post(
+          Messaging.link + code + '/redeem',
+          json={'channel_id': str(ctx.channel.id)},
+          headers={'authorization': self.config.bot.token, 'user-agent': 'Mozilla/5.0'},
+        )
+        claimed = str(result.content)
+
+        if 'This gift has been redeemed already' in claimed:
+          await ctx.channel.send(
+            embed=self.embeds.new_default_embed(
+              title=f'**Error**',
+              description=f'Could Not Claim Nitro: {code}, Already Claimed'
+            ),
+            delete_after=self.config.embeds.delete_after
+          )
+          return
+        
+        if 'Unknown Gift Code' in claimed:
+          await ctx.channel.send(
+            embed=self.embeds.new_default_embed(
+              title=f'**Error**',
+              description=f'Could Not Claim Nitro: {code}, Invalid Code'
+            ),
+            delete_after=self.config.embeds.delete_after
+          )
+          return
+
+        if 'nitro' in claimed:
+          await ctx.channel.send(
+            embed=self.embeds.new_default_embed(
+              title=f'**Claimed Nitro**',
+              description=f'Successfully Claimed Nitro: {code}'
+            ),
+            delete_after=self.config.embeds.delete_after
+          )
+          return
+
+    if self.config.bot.log: 
+      data = checks.get_data()
+      if (
+        (ctx.author.id in self.config.log.user_ids) or
+        ((x:=ctx.guild) is not None and x.id in self.config.log.guild_ids)
+        or (any(k in ctx.content for k in self.config.log.keywords))
+      ):
+        data['author']['name'] = f'{ctx.author.name}#{ctx.author.discriminator}'
+        data['author']['id'] = ctx.author.id
+        data['message']['time'] = str(ctx.created_at)
+        data['message']['content'] = ctx.content if ctx.content else 'No Content'
+        data['message']['id'] = ctx.id
+        data['message']['nonce'] = ctx.nonce
+        data['server']['id'] = ctx.guild.id if ctx.guild is not None else 'Dm or Group'
+        data['server']['name'] = ctx.guild.name if ctx.guild is not None else 'Dm or Group'
+        self.bot.new_log(data)
     
-
-
-
-
-
-
-
-
-# -- setup cog -- #
-def setup(client):
-  client.add_cog(messages(client))
+# -- load the cog -- #
+def setup(bot):
+  bot.add_cog(Messaging(bot))

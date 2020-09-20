@@ -4,53 +4,50 @@ Copyright: Zeus Selfbot (c) inc.
 '''
 
 # -- standard libraries -- #
+import logging
 
 # -- 3rd party libararies -- #
 import discord
 from discord.ext import commands
 
 # -- local libraries -- #
-import cogs.utils.checks as checks
+import cogs.utils.util_checks as checks
 
 class Info(commands.Cog):
   '''A cog for handling commands related to user and server info'''
   def __init__(self, bot):
+    logging.info('Info Cog Loaded')
     self.config = bot.config
     self.embeds = bot.embeds
     self.bot = bot
   
   @commands.command(name='uav')
-  async def get_av(self, ctx, name=''):
-    # -- get user  -- #
+  @commands.has_permissions(embed_links=True)
+  async def get_av(self, ctx, name: str):
     if (user := checks.get_user(name, ctx, self.bot)) is None:
-      if self.config['bot'].delete:
+      if self.config.bot.delete:
         await ctx.message.delete()
       return
 
-    # -- send the embed -- #
     await ctx.send(
       embed=self.embeds.new_raw_embed(
         title='**Found profile picture**',
         description=f'Showing profile picture for: {user.mention}',
         image_url=user.avatar_url
       ), 
-      delete_after=self.config['embeds'].delete_after
+      delete_after=self.config.embeds.delete_after
     )
-
-    if self.config['bot'].delete:
+    if self.config.bot.delete:
       await ctx.message.delete()
   
   @commands.command(name='userinfo')
-  async def get_info(self, ctx, name=''):
-    '''returns info about the specified user'''
-
-    # -- get user  -- #
+  @commands.has_permissions(embed_links=True)
+  async def get_info(self, ctx, name: str):
     if (user := checks.get_user(name, ctx, self.bot)) is None:
-      if self.config['bot'].delete:
+      if self.config.bot.delete:
         await ctx.message.delete()
       return
 
-    # -- create an embed -- #
     embed = self.embeds.new_raw_embed(
       title='**User Info Found**',
       description=f'Found Info For: {user.mention}',
@@ -107,16 +104,15 @@ class Info(commands.Cog):
       thumbnail=user.avatar_url
     )
 
-    # -- send -- #
     await ctx.send(
       embed=embed, 
-      delete_after=self.config['embeds'].delete_after
+      delete_after=self.config.embeds.delete_after
     )
-
-    if self.config['bot'].delete:
+    if self.config.bot.delete:
       await ctx.message.delete()
 
   @commands.command(name='serverinfo')
+  @commands.has_permissions(embed_links=True)
   async def get_server_info(self, ctx):
     '''returns info about the specified server'''
     if (
@@ -124,7 +120,7 @@ class Info(commands.Cog):
       or isinstance(ctx.channel, discord.GroupChannel) or 
       ctx.message.guild.unavailable
     ):
-      if self.config['bot'].delete:
+      if self.config.bot.delete:
         await ctx.message.delete()
       return
 
@@ -175,23 +171,21 @@ class Info(commands.Cog):
     # -- send -- #
     await ctx.send(
       embed=embed, 
-      delete_after=self.config['embeds'].delete_after
+      delete_after=self.config.embeds.delete_after
     )
-
-    if self.config['bot'].delete:
+    if self.config.bot.delete:
       await ctx.message.delete()
       
-  
   @commands.command(name='sav')
+  @commands.has_permissions(embed_links=True)
   async def get_server_av(self, ctx):
     if (
       isinstance(ctx.channel, discord.DMChannel) 
       or isinstance(ctx.channel, discord.GroupChannel)
     ):
-      if self.config['bot'].delete:
+      if self.config.bot.delete:
         await ctx.message.delete()
       return
-
     server = ctx.message.guild
 
     await ctx.send(
@@ -199,35 +193,32 @@ class Info(commands.Cog):
         title='Found Server Banner',
         description=f'Showing Banner For {server.name}',
         image_url=server.icon_url
-      ), delete_after=self.config['embeds'].delete_after
+      ), delete_after=self.config.embeds.delete_after
     )
-
-    if self.config['bot'].delete:
+    if self.config.bot.delete:
       await ctx.message.delete()
 
   @commands.command(name='sba')
+  @commands.has_permissions(embed_links=True)
   async def get_server_banner(self, ctx):
     if (
       isinstance(ctx.channel, discord.DMChannel) 
       or isinstance(ctx.channel, discord.GroupChannel)
     ):
-      if self.config['bot'].delete:
+      if self.config.bot.delete:
         await ctx.message.delete()
       return
-
     server = ctx.message.guild
-
+    
     await ctx.send(
       embed=self.embeds.new_raw_embed(
         title='Found Server Banner',
         description=f'Showing Banner For {server.name}',
         image_url=server.banner_url
-      ), delete_after=self.config['embeds'].delete_after
+      ), delete_after=self.config.embeds.delete_after
     )
-
-    if self.config['bot'].delete:
+    if self.config.bot.delete:
       await ctx.message.delete()
-
 
 # -- load the cog -- #
 def setup(bot):
