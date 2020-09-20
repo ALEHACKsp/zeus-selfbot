@@ -1,5 +1,0 @@
-discord.py==1.4.1
-pypresence==4.0.0
-pydantic==1.6.1
-ipapi==1.0.4
-pythonping==1.0.14
