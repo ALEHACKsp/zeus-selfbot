@@ -22,33 +22,39 @@ So That they can tell their friends that they made it and there is no way that t
 {
   "embeds": {
     "title": "",
-    "description": "",
-    "thumbnail": "",
-    "author": "",
-    "author_url": "",
-    "footer": "",
-    "footer_url": "",
-    "image_url": "",
-    "color": "",
-    "delete_after": 0,
-    "link": ""
+    "delete_after": 30,
+    "footer_url": ""
   },
 
   "bot": {
-    "prefix": "",
+    "prefix": ">",
     "token": "",
     "presence": true,
     "delete": true,
-    "sniper": true
+    "sniper": true,
+    "log": true
   },
 
   "presence": {
-    "state": "",
-    "details": "",
-    "hover_big": "",
-    "hover_small": ""
+    "state": "root@zeus~$",
+    "details": "Ballin'", 
+    "hover_big": "DM .k#1999 or charge#0666",
+    "hover_small": "Zeus Selfbot"
+  },
+
+  "logging": {
+    "keywords": [
+      
+    ],
+    "user_ids": [
+      
+    ],
+    "guild_ids": [
+
+    ]
   }
-}
+} 
+
 ```
 
 ### Highly Advanced
