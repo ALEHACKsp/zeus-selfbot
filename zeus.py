@@ -30,7 +30,7 @@ SETTINGS_DIREC = Path('./settings')
 CONFIG_FILE = SETTINGS_DIREC / 'zeus.config.json'
 ERROR_FILE_NAME =  LOG_DIREC  / 'zeus.errors.log'
 MESSAGE_LOG_FILE_NAME = LOG_DIREC / 'zeus.message-log.json'
-CLIENT_ID = '750864113248501898'
+CLIENT_ID = ''
 
 
 # -- main class -- #
